@@ -7,7 +7,6 @@ PATH_TRAIN = 'data'
 PATH_TEST = 'test'
 k = 3
 
-
 # Fungsi untuk membaca dan memproses satu gambar
 def process_image(uploaded_file, image_size=(75, 75)):
     # Membaca file gambar dari streamlit
@@ -60,7 +59,6 @@ def kmeans_manual(features, k, centroids, max_iters=100):
 
         centroids = new_centroids
     return centroids
-
 
 def initialize_centroids(data, k):
     """
