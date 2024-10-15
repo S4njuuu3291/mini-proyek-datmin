@@ -28,7 +28,8 @@ if st.button("Train"):
             all_pixels.append(img)
     all_pixels = np.vstack(all_pixels)
     st.session_state.pixels = all_pixels
-    st.session_state.centroids = initialize_centroids(all_pixels, k)
+    st.session_state.stcentroids = initialize_centroids(all_pixels, k)
+    st.session_state.centroids = kmeans_manual(st.session_state.pixels, k, st.session_state.stcentroids)
     st.success("Model berhasil dilatih!")
 
 # Tombol untuk memprediksi
