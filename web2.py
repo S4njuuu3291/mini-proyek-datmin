@@ -70,7 +70,9 @@ if st.button("Predict"):
         st.subheader("Hasil Clustering")
 
         silhouette_scores = []
+        cluster_percentages = []
 
+        # Iterasi untuk setiap gambar uji
         for i, file in enumerate(test_images):
             image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -85,12 +87,18 @@ if st.button("Predict"):
             # Hitung persentase tiap cluster
             unique, counts = np.unique(labels, return_counts=True)
             percentages = counts / len(labels) * 100
+            cluster_percentages.append(percentages)
 
             # Layout dengan dua kolom: kiri (gambar) dan kanan (pie chart)
             col_img, col_chart = st.columns([1, 1])
 
             with col_img:
-                show_image_with_legend(clustered_image, st.session_state.centroids, k, f"Hasil Klustering {i + 1}")
+                st.image(
+                    clustered_image, 
+                    caption=f"Hasil Klustering {i + 1}", 
+                    use_column_width=False,  # Tidak menggunakan lebar penuh kolom
+                    width=500  # Menyesuaikan lebar gambar (setengah dari sebelumnya)
+                )
 
             with col_chart:
                 st.write(f"Silhouette Score: {score:.4f}")
@@ -103,7 +111,7 @@ if st.button("Predict"):
 
                 ax.pie(
                     percentages,
-                    labels=[f"Cluster {j + 1}" for j in range(k)],
+                    labels=[f"Cluster {i + 1}" for i in range(k)],
                     autopct='%1.1f%%',
                     colors=colors,
                     startangle=90,
@@ -118,9 +126,5 @@ if st.button("Predict"):
 
 # Menambahkan footer
 st.markdown("""
-<p style='text-align: center; color: #999;'>© 2024 K-Means Clustering</p>
-<p style='text-align: center; color: #999;'>Tegar Muhamad Rizki &nbsp;&nbsp;&nbsp; Sanjukin Ndube Pinem &nbsp;&nbsp;&nbsp; Fahri Nizar Argubi</p>
+<p style='text-align: center; color: #999;'>© 2024 K-Means Clustering. Kelompok Bebek :)</p>
 """, unsafe_allow_html=True)
-
-
-
