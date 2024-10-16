@@ -40,6 +40,10 @@ with col2:
     st.subheader("Unggah Gambar untuk Testing")
     test_images = st.file_uploader("Pilih gambar untuk folder Testing", accept_multiple_files=True, type=['jpg', 'jpeg', 'png'])
 
+# Pilih area hutan atau gunung
+st.subheader("Pilih Area yang akan dianalisis")
+area = st.selectbox("Pilih area:", ["Hutan", "Gunung"])
+
 # Input untuk jumlah cluster
 st.subheader("Parameter K-Means")
 k = st.number_input("Masukkan jumlah cluster (k)", min_value=1, value=3)
@@ -114,9 +118,27 @@ if st.button("Predict"):
                 # Tampilkan pie chart di Streamlit
                 st.pyplot(fig)
 
+            # Analisis kondisi berdasarkan area
+            if area == "Hutan":
+                # Ambil centroid cluster hijau (misal RGB dekat [0, 255, 0])
+                green_centroid_index = np.argmin(np.linalg.norm(st.session_state.centroids - np.array([0, 255, 0]), axis=1))
+                green_percentage = percentages[green_centroid_index]
+
+                # Tampilkan analisis kondisi hutan
+                st.write("Analisis Kondisi Hutan:")
+                if green_percentage >= 90:
+                    st.success(f"Kondisi Hutan sangat baik ({green_percentage:.2f}% hijau)")
+                elif 80 <= green_percentage < 90:
+                    st.info(f"Hutan dalam kondisi baik ({green_percentage:.2f}% hijau)")
+                elif 60 <= green_percentage < 80:
+                    st.warning(f"Hutan butuh perbaikan ({green_percentage:.2f}% hijau)")
+                else:
+                    st.error(f"Terjadi kerusakan hutan ({green_percentage:.2f}% hijau)")
+
             st.write("---")  # Garis pemisah antar gambar
 
 # Menambahkan footer
 st.markdown("""
-<p style='text-align: center; color: #999;'>© 2024 K-Means Clustering. Kelompok Bebek :).</p>
+<p style='text-align: center; color: #999;'>© 2024 K-Means Clustering</p>
+<p style='text-align: center; color: #999;'>Tegar Muhamad Rizki &nbsp;&nbsp;&nbsp; Sanjukin Ndube Pinem &nbsp;&nbsp;&nbsp; Fahri Nizar Argubi</p>
 """, unsafe_allow_html=True)
